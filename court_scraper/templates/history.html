@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search History</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Court Scraper MVP</a>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="/">Search</a></li>
+      <li class="nav-item"><a class="nav-link active" href="/history">History</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Search History</h2>
+    <form method="GET" action="/history">
+      <button type="submit" class="btn btn-secondary">Refresh</button>
+    </form>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Court</th>
+        <th>Case</th>
+        <th>Parties</th>
+        <th>Status</th>
+        <th>Next Hearing</th>
+        <th>Cause Listed</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for case in cases %}
+      <tr>
+        <td>{{ case.id }}</td>
+        <td>{{ case.case_type }}</td>
+        <td>{{ case.case_number }}/{{ case.year }}</td>
+        <td>{{ case.parties }}</td>
+        <td>
+          {% if case.status == "Pending" %}
+            <span class="badge bg-warning text-dark">{{ case.status }}</span>
+          {% else %}
+            <span class="badge bg-success">{{ case.status }}</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if case.next_hearing == current_date %}
+            <span class="text-danger">{{ case.next_hearing }} (Tomorrow)</span>
+          {% else %}
+            {{ case.next_hearing }}
+          {% endif %}
+        </td>
+        <td>
+          {% if case.cause_listed %}
+            <span class="text-success">✅ Listed</span>
+          {% else %}
+            <span class="text-danger">❌ Not Listed</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
